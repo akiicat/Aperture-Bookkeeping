@@ -1,0 +1,5 @@
+{
+  "name": "光圈記帳 (Aperture Bookkeeping)",
+  "description": "A mobile-first bookkeeping application connected to Google Sheets via Apps Script. Features intuitive expense tracking, category management, and monthly analysis.",
+  "requestFramePermissions": []
+}
