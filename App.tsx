@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { format, addMonths, subMonths, parseISO, isSameMonth } from 'date-fns';
+import { Storage } from '@capacitor/storage';
 import TransactionList from './components/TransactionList';
 import AddTransaction from './components/AddTransaction';
 import Settings from './components/Settings';
@@ -20,15 +21,26 @@ const App: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
   
   // Settings State with LocalStorage persistence
-  const [settings, setSettings] = useState<UserSettings>(() => {
-    const saved = localStorage.getItem('aperture_settings');
-    return saved ? JSON.parse(saved) : { scriptUrl: DEFAULT_SCRIPT_URL, username: '' };
-  });
+  const [settings, setSettings] = useState<UserSettings>({ scriptUrl: DEFAULT_SCRIPT_URL, username: '' });
+
+  // Load settings from storage on initial render
+  useEffect(() => {
+    const loadSettings = async () => {
+      const { value } = await Storage.get({ key: 'aperture_settings' });
+      if (value) {
+        setSettings(JSON.parse(value));
+      }
+    };
+    loadSettings();
+  }, []);
 
   // Save settings when changed
-  const handleSaveSettings = (newSettings: UserSettings) => {
+  const handleSaveSettings = async (newSettings: UserSettings) => {
     setSettings(newSettings);
-    localStorage.setItem('aperture_settings', JSON.stringify(newSettings));
+    await Storage.set({
+      key: 'aperture_settings',
+      value: JSON.stringify(newSettings),
+    });
   };
 
   // Redirect to settings if no username
