@@ -80,7 +80,7 @@ const AddTransaction: React.FC<AddTransactionProps> = ({ onClose, onSuccess, set
         category: selectedCategory.name,
         amount: finalAmount,
         currency: 'TWD',
-        item: note || selectedCategory.name, // maps to 'item'/'note'
+        note: note || selectedCategory.name, // maps to 'item'/'note'
         user: settings.username
     };
     
